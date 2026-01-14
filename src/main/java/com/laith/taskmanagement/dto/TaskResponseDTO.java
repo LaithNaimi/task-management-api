@@ -1,5 +1,7 @@
 package com.laith.taskmanagement.dto;
 
+import com.laith.taskmanagement.model.Category;
+import com.laith.taskmanagement.model.TaskPriority;
 import com.laith.taskmanagement.model.TaskStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +20,13 @@ public class TaskResponseDTO {
     private Long id;
     private String title;
     private String description;
+
     private TaskStatus status;
+    private TaskPriority priority;
+
+    private Long categoryId;
+    private String categoryName;
+
     private LocalDate dueDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

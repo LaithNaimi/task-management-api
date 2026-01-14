@@ -1,5 +1,7 @@
 package com.laith.taskmanagement.dto;
 
+import com.laith.taskmanagement.model.Category;
+import com.laith.taskmanagement.model.TaskPriority;
 import com.laith.taskmanagement.model.TaskStatus;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +26,9 @@ public class CreateTaskRequestDTO {
     @Size(max = 1000)
     private String description;
     private TaskStatus status;
+    private TaskPriority priority;
 
+    private Long categoryId;
     @FutureOrPresent
     private LocalDate dueDate;
 
