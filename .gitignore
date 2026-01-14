@@ -1,14 +1,35 @@
-# Maven / Gradle build
-target/
-build/
-
-# IntelliJ
-.idea/
-*.iml
+# Maven / Gradle
+/target/
+/build/
 
 # Logs
 *.log
 
-# OS
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# VS Code
+.vscode/
+
+# Eclipse / STS
+.classpath
+.project
+.settings/
+
+# OS files
 .DS_Store
 Thumbs.db
+
+# Env / secrets
+.env
+
+# Spring Boot
+*.pid
+
+# H2 database files (if using file-based H2)
+*.mv.db
+*.trace.db
