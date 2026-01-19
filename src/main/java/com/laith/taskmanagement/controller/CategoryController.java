@@ -3,8 +3,8 @@ package com.laith.taskmanagement.controller;
 import com.laith.taskmanagement.dto.CategoryResponseDTO;
 import com.laith.taskmanagement.dto.CreateCategoryRequestDTO;
 import com.laith.taskmanagement.dto.UpdateCategoryRequestDTO;
-import com.laith.taskmanagement.model.Category;
 import com.laith.taskmanagement.service.CategoryService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +13,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@Tag(name = "Categories", description = "Category management endpoints")
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/categories")
 
 public class CategoryController {
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;

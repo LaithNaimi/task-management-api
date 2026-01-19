@@ -12,7 +12,7 @@ import com.laith.taskmanagement.model.TaskPriority;
 import com.laith.taskmanagement.model.TaskStatus;
 import com.laith.taskmanagement.repository.CategoryRepository;
 import com.laith.taskmanagement.repository.TaskRepository;
-import jakarta.validation.Valid;
+import com.laith.taskmanagement.specification.TaskSpecifications;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,85 +30,18 @@ public class TaskService {
     }
 
     @Transactional(readOnly = true)
-    public Page<TaskResponseDTO> getAll(TaskStatus status, TaskPriority priority, Long categoryId, String q, Pageable pageable) {
+    public Page<TaskResponseDTO> getAll(
+            TaskStatus status,
+            TaskPriority priority,
+            Long categoryId,
+            String q,
+            Pageable pageable
+    ) {
 
-        Page<Task> page;
-        Boolean hasStatus = status != null;
-        Boolean hasPriority = priority != null;
-        Boolean hasCategory = categoryId != null;
-        boolean hasQ = q != null && !q.trim().isEmpty();
+        var specification = TaskSpecifications.build(status, priority, categoryId, q);
+        Page<Task> tasks = taskRepo.findAll(specification, pageable);
 
-        String keyword = hasQ ? q.trim() : null;
-
-        if (!hasQ) {
-            if (hasStatus && hasPriority && hasCategory) {
-                page = taskRepo.findByStatusAndPriorityAndCategoryId(status, priority, categoryId, pageable);
-            } else if (hasStatus && hasPriority) {
-                page = taskRepo.findByStatusAndPriority(status, priority, pageable);
-            } else if (hasStatus && hasCategory) {
-                page = taskRepo.findByStatusAndCategoryId(status, categoryId, pageable);
-            } else if (hasPriority && hasCategory) {
-                page = taskRepo.findByPriorityAndCategoryId(priority, categoryId, pageable);
-            } else if (hasStatus) {
-                page = taskRepo.findByStatus(status, pageable);
-            } else if (hasPriority) {
-                page = taskRepo.findByPriority(priority, pageable);
-            } else if (hasCategory) {
-                page = taskRepo.findByCategoryId(categoryId, pageable);
-            } else {
-                page = taskRepo.findAll(pageable);
-            }
-
-        }
-        else {
-            if (hasStatus && hasPriority && hasCategory) {
-                page = taskRepo.findByStatusAndPriorityAndCategoryIdAndTitleContainingIgnoreCaseOrStatusAndPriorityAndCategoryIdAndDescriptionContainingIgnoreCase(
-                        status, priority, categoryId, keyword,
-                        status, priority, categoryId, keyword,
-                        pageable
-                );
-            } else if (hasStatus && hasPriority) {
-                page = taskRepo.findByStatusAndPriorityAndTitleContainingIgnoreCaseOrStatusAndPriorityAndDescriptionContainingIgnoreCase(
-                        status, priority, keyword,
-                        status, priority, keyword,
-                        pageable
-                );
-            } else if (hasStatus && hasCategory) {
-                page = taskRepo.findByStatusAndCategoryIdAndTitleContainingIgnoreCaseOrStatusAndCategoryIdAndDescriptionContainingIgnoreCase(
-                        status, categoryId, keyword,
-                        status, categoryId, keyword,
-                        pageable
-                );
-            } else if (hasPriority && hasCategory) {
-                page = taskRepo.findByPriorityAndCategoryIdAndTitleContainingIgnoreCaseOrPriorityAndCategoryIdAndDescriptionContainingIgnoreCase(
-                        priority, categoryId, keyword,
-                        priority, categoryId, keyword,
-                        pageable
-                );
-            } else if (hasStatus) {
-                page = taskRepo.findByStatusAndTitleContainingIgnoreCaseOrStatusAndDescriptionContainingIgnoreCase(
-                        status, keyword,
-                        status, keyword,
-                        pageable
-                );
-            } else if (hasPriority) {
-                page = taskRepo.findByPriorityAndTitleContainingIgnoreCaseOrPriorityAndDescriptionContainingIgnoreCase(
-                        priority, keyword,
-                        priority, keyword,
-                        pageable
-                );
-            } else if (hasCategory) {
-                page = taskRepo.findByCategoryIdAndTitleContainingIgnoreCaseOrCategoryIdAndDescriptionContainingIgnoreCase(
-                        categoryId, keyword,
-                        categoryId, keyword,
-                        pageable
-                );
-            } else {
-                page = taskRepo.findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(keyword, keyword, pageable);
-            }
-        }
-
-        return page.map(taskMapper::mapEntityToDTO);
+        return tasks.map(taskMapper::mapEntityToDTO);
     }
 
     @Transactional(readOnly = true)
@@ -137,7 +70,7 @@ public class TaskService {
     }
 
     @Transactional
-    public TaskResponseDTO updateTask(Long id, @Valid UpdateTaskRequestDTO updateReq) {
+    public TaskResponseDTO updateTask(Long id, UpdateTaskRequestDTO updateReq) {
         Task task = taskRepo.findById(id).orElseThrow(() -> new TaskNotFoundException(id));
 
         if (updateReq.getTitle() != null) {
