@@ -1,7 +1,6 @@
 package com.laith.taskmanagement.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +10,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateCategoryRequestDTO {
+public class LoginRequestDTO {
+    @NotBlank
+    private String email;
 
     @NotBlank
-    @Size(min = 2, max = 50)
-    private String name;
+    private String password;
 }

@@ -17,4 +17,17 @@ public final class ProblemTypes {
 
     public static final URI BAD_REQUEST = URI.create("urn:problem:bad-request");
     public static final URI INTERNAL_ERROR = URI.create("urn:problem:internal-error");
+
+    public static final URI USER_NOT_FOUND = URI.create("urn:problem:user-not-found");
+
+
+    public static final URI METHOD_NOT_ALLOWED = URI.create("urn:problem:method-not-allowed");
+    public static final URI CONFLICT = URI.create("urn:problem:conflict");
+
+    public static final URI UNAUTHORIZED = URI.create("urn:problem:unauthorized");
+    public static final URI FORBIDDEN = URI.create("urn:problem:forbidden");
+
+    public static final URI EMAIL_ALREADY_EXISTS = URI.create("urn:problem:email-already-exists");
+    public static final URI INVALID_CREDENTIALS = URI.create("urn:problem:invalid-credentials");
+
 }

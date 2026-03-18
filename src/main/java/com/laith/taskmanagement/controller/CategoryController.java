@@ -14,7 +14,6 @@ import java.net.URI;
 import java.util.List;
 
 @Tag(name = "Categories", description = "Category management endpoints")
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/categories")
 

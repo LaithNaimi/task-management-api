@@ -16,8 +16,10 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 100)
     private String title;
 
+    @Column(length = 1000)
     private String description;
 
     @Enumerated(EnumType.STRING)
@@ -29,6 +31,11 @@ public class Task {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private AppUser owner;
+
     private LocalDate dueDate;
 
     @Column(nullable = false, updatable = false)

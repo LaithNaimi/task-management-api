@@ -25,6 +25,11 @@ public class Category {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private AppUser owner;
+
+
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();

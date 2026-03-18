@@ -8,6 +8,14 @@ import org.springframework.data.jpa.domain.Specification;
 public final class TaskSpecifications {
     private TaskSpecifications() {}
 
+    public static Specification<Task> hasOwnerId(Long ownerId) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("owner").get("id"), ownerId);
+    }
+
+    public static Specification<Task> hasId(Long id) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("id"), id);
+    }
+
     public static Specification<Task> hasStatus(TaskStatus status) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("status"), status);
     }
@@ -24,15 +32,15 @@ public final class TaskSpecifications {
         return (root, query, criteriaBuilder) -> {
             String like = "%" + keyword.toLowerCase() + "%";
 
-            var titleLike = criteriaBuilder.like(root.get("title"), like);
-            var descriptionLike = criteriaBuilder.like(root.get("description"), like);
+            var titleLike = criteriaBuilder.like(criteriaBuilder.lower(root.get("title")), like);
+            var descriptionLike = criteriaBuilder.like(criteriaBuilder.lower(root.get("description")), like);
 
             return criteriaBuilder.or(titleLike, descriptionLike);
         };
     }
 
-    public static Specification<Task> build(TaskStatus status, TaskPriority priority, Long categoryId, String q) {
-        Specification<Task> specification = Specification.unrestricted();
+    public static Specification<Task> build(Long ownerId, TaskStatus status, TaskPriority priority, Long categoryId, String q) {
+        Specification<Task> specification = Specification.where(hasOwnerId(ownerId));
 
         if(status != null) {
             specification = specification.and(hasStatus(status));

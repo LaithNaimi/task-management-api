@@ -23,9 +23,9 @@ import java.net.URI;
 import java.util.List;
 
 @Tag(name = "Tasks", description = "Task management endpoints")
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/tasks")
+@io.swagger.v3.oas.annotations.security.SecurityRequirement(name = "bearerAuth")
 public class TaskController {
 
     private final TaskService taskService;
@@ -61,7 +61,7 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getById(id));
     }
 
-    @Operation(summary = "Create task", description = "Creates a new task. Priority defaults to MEDIUM if omitted.")
+    @Operation(summary = "Create task", description = "Creates a new task. Priority defaults to DEFAULT if omitted.")
     @PostMapping
     public ResponseEntity<TaskResponseDTO> createTask(@Valid @RequestBody CreateTaskRequestDTO task) {
         TaskResponseDTO created  = taskService.addTask(task);

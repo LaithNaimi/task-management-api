@@ -11,6 +11,6 @@ import lombok.*;
 public class UpdateCategoryRequestDTO {
 
     @NotBlank
-    @Size(min = 2, max = 60)
+    @Size(min = 2, max = 50)
     private String name;
 }

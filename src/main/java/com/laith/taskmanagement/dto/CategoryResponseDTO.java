@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CategoryResponseDTO {
 
-    Long id;
-    String name;
+    private Long id;
+    private String name;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
